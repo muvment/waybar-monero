@@ -1,30 +1,37 @@
 #!/bin/bash
 
 # https://github.com/muvment/waybar-monero
-# Can use either of these ids to get the info from p2pool or mini.p2pool API. MAKE SURE YOU USE YOUR WALLET ID IF YOU'RE NOT QUERING YOUR ACTUAL POOL!!
-# Otherwise, you'll get someone else's data
+
+# Your mining ID
 miner_id=""
-wallet_id=""
+
+# If you're mining on the mini.p2pool chain and you're registered
+# in the "https://xmrvsbeast.com/p2pool" raffle, you need
+# to replace "0" with your wallet id
+wallet_id="0"
 
 # Main account balance
 main=""
 
-# Fetch mini.p2pool balance
-mini_p2pool=$(curl -sS "https://mini.p2pool.observer/payouts/$miner_id" \
+# Currency to be used with localmonero query (can be USD, EUR, GBP or HKD)
+currency=""
+
+# Currency symbol to use in display ($, £, €, etc...)
+symbol=""
+
+# Fetch p2pool balance, unquote the correct one (first is main, second is mini)
+#p2pool=$(curl -sS "https://p2pool.observer/payouts/$miner_id"  | grep -Po '(?<=<p><strong>Estimated total:</strong>).*?(?<=XMR</p>)' | awk '{print $1}')
+#p2pool=$(curl -sS "https://mini.p2pool.observer/payouts/$miner_id" | grep -Po '(?<=<p><strong>Estimated total:</strong>).*?(?<=XMR</p>)' | awk '{print $1}')
+
+# Fetch xmrvsbeast raffle bonus balance
+xmrvsbeast=$(curl -sS "https://p2pool.observer/payouts/$wallet_id" \
     | grep -Po '(?<=<p><strong>Estimated total:</strong>).*?(?<=XMR</p>)' | awk '{print $1}')
 
-# Fetch p2pool balance (for xmrvsbeast raffle bonus balance)
-p2pool=$(curl -sS "https://p2pool.observer/payouts/$wallet_id" \
-    | grep -Po '(?<=<p><strong>Estimated total:</strong>).*?(?<=XMR</p>)' | awk '{print $1}')
-
-# P2pool total balance (to be added)
-p2p_total=$(awk "BEGIN{print($mini_p2pool + $p2pool)}")
+# P2pool total balance
+p2p_total=$(awk "BEGIN{print($p2pool + $xmrvsbeast)}")
 
 # Total sum of main and p2pool wallets together (to be added)
 total=$(awk "BEGIN{print($main + $p2p_total)}")
-
-# Currency to be used with localmonero query (can be USD, EUR, GBP or HKD)
-currency="USD"
 
 # Localmonero url to fetch current market street exchange prices
 lm_url="https://localmonero.co/web/ticker?currencyCode=$currency"
@@ -34,7 +41,7 @@ p2p_pn=$(curl -sS "https://mini.p2pool.observer/api/payouts/$miner_id?search_lim
 
 # Fetch localmonero info and format output to the desired display pattern
 lm=$(curl -sS "$lm_url" | jq -M '. [] | .avg_6h, .avg_12h, .avg_24h' \
-    | sed '1 s/.*/6h: &/;2 s/.*/12h: &/;3 s/.*/24h: &/;s/.*/&$/')
+    | sed "1 s/.*/6h: &/;2 s/.*/12h: &/;3 s/.*/24h: &/;s/.*/&$symbol/")
 LM1=$(echo "$lm" | awk 'FNR == 1 {print $1, $2, $3}')
 LM2=$(echo "$lm" | awk 'FNR == 2 {print $1, $2, $3}')
 LM3=$(echo "$lm" | awk 'FNR == 3 {print $1, $2, $3}')
@@ -50,13 +57,12 @@ BTC=$(rates -s 1 BTC $currency)
 case $1 in
     w)
     # Format of the tooltip display
-    #tooltip="Owned:\n $OWNED$\nRates:\n $XMR$\n $LTC$\n $BTC$\n"
-    tooltip="Main:\n $MAIN$\nP2pool:\n $P2POOL$\nTotal:\n $TOTAL$\nP2pool payouts:\n$p2p_pn\nLocalmonero:\n$LM1\n$LM2\n$LM3\nRates:\n $XMR$\n $LTC$\n $BTC$\n"
+    tooltip="Main:\n $MAIN$symbol\nP2pool:\n $P2POOL$symbol\nTotal:\n $TOTAL$symbol\nP2pool payouts:\n$p2p_pn\nLocalmonero:\n$LM1\n$LM2\n$LM3\nRates:\n $XMR$symbol\n $LTC$symbol\n $BTC$symbol\n"
 
     # Info to be sent to waybar
     echo "{\"text\": \" $TOTAL\", \"tooltip\": \"<tt>$tooltip</tt>\", \"class\": \"crypto\"}"
     ;;
     t)
     # Display in terminal
-    echo -e "Main:\n $MAIN$\nP2pool:\n $P2POOL$\nTotal:\n $TOTAL$\nP2pool payouts:\n$p2p_pn\nLocalmonero:\n$LM1\n$LM2\n$LM3\nRates:\n $XMR$\n $LTC$\n $BTC$\n"
+    echo -e "Main:\n $MAIN$symbol\nP2pool:\n $P2POOL$symbol\nTotal:\n $TOTAL$symbol\nP2pool payouts:\n$p2p_pn\nLocalmonero:\n$LM1\n$LM2\n$LM3\nRates:\n $XMR$symbol\n $LTC$symbol\n $BTC$symbol\n"
 esac
