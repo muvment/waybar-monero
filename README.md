@@ -2,7 +2,7 @@
 
 ## Monero &amp; P2pool ticker for waybar (and terminal)
 
-<img src="example.png" align="right" width="125px"/>
+<img src="example/example.png" align="right" width="125px"/>
 
 For a fast overview of your XMR and P2pool stats, without having to open the wallet and wait for it to sync.
 
@@ -120,7 +120,7 @@ Alternatively, if you plan to use it in your terminal, put it somewhere in your 
 
 ## Preview
 
-![](example.gif)
+![](example/example.gif)
 
 I don' drink coffee.
 
