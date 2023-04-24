@@ -18,7 +18,7 @@ The rest is done using [P2pool's observer](https://p2pool.observer/api) API and 
 
 ## Installation
 
-1. Download or clone this repo and put [waybar-crypto.sh](https://github.com/muvment/waybar-monero/raw/main/waybar-crypto.sh) in `~/.config/waybar/scripts/` for example
+1. Download or clone this repo and put [waybar-monero.sh](https://github.com/muvment/waybar-monero/raw/main/waybar-monero.sh) in `~/.config/waybar/scripts/` for example
 
 - With curl
 ```
@@ -26,13 +26,13 @@ The rest is done using [P2pool's observer](https://p2pool.observer/api) API and 
 mkdir ~/.config/waybar/scripts
 
 # Download the script
-curl -LJO 'https://github.com/muvment/waybar-monero/raw/main/waybar-crypto.sh'
+curl -LJO 'https://github.com/muvment/waybar-monero/raw/main/waybar-monero.sh'
 
 # Copy the script into your scripts folder
-mv waybar-crypto.sh ~/.config/waybar/scripts
+mv waybar-monero.sh ~/.config/waybar/scripts
 
 # Make it executable
-chmod +x ~/.config/waybar/scripts/waybar-crypto.sh
+chmod +x ~/.config/waybar/scripts/waybar-monero.sh
 ```
 
 - With git
@@ -47,10 +47,10 @@ git clone https://github.com/muvment/waybar-monero
 cd waybar-monero
 
 # Copy the script into your scripts folder
-cp waybar-crypto.sh ~/.config/waybar/scripts
+cp waybar-monero.sh ~/.config/waybar/scripts
 
 # Make it executable
-chmod +x ~/.config/waybar/scripts/waybar-crypto.sh
+chmod +x ~/.config/waybar/scripts/waybar-monero.sh
 cd
 ```
 2. If you haven't already, get your miner ID (replace `address` with your mining wallet address) and copy it
@@ -61,7 +61,7 @@ curl -sS "https://p2pool.observer/api/miner_info/address" | jq '.'
 curl -sS "https://mini.p2pool.observer/api/miner_info/address" | jq '.'
 ```
 
-3. Open `~/.config/waybar/scripts/waybar-crypto.sh` in your editor and modify the following
+3. Open `~/.config/waybar/scripts/waybar-monero.sh` in your editor and modify the following
 ```
 # Your mining ID (paste your mining ID here)
 miner_id=""
@@ -91,7 +91,7 @@ symbol=""
     "return-type": "json",
     "format-alt": "{}",
     "interval": 3600,
-    "exec": "$HOME/.config/waybar/scripts/waybar-crypto.sh w",
+    "exec": "$HOME/.config/waybar/scripts/waybar-monero.sh w",
     "tooltip":true
     },
 ```
