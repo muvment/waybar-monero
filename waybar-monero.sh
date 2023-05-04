@@ -2,13 +2,8 @@
 
 # https://github.com/muvment/waybar-monero
 
-# Your mining ID
-miner_id=""
-
-# If you're mining on the mini.p2pool chain and you're registered
-# in the "https://xmrvsbeast.com/p2pool" raffle, you need
-# to replace "0" with your wallet id
-wallet_id="0"
+# Your wallet address
+address=""
 
 # Main account balance
 main=""
@@ -27,11 +22,11 @@ s1=""
 s2=""
 
 # Fetch p2pool balance, unquote the correct one (first is main, second is mini)
-#p2pool=$(curl -sS "https://p2pool.observer/payouts/$miner_id"  | grep -Po '(?<=<p><strong>Estimated total:</strong>).*?(?<=XMR</p>)' | awk '{print $1}')
-#p2pool=$(curl -sS "https://mini.p2pool.observer/payouts/$miner_id" | grep -Po '(?<=<p><strong>Estimated total:</strong>).*?(?<=XMR</p>)' | awk '{print $1}')
+#p2pool=$(curl -sS "https://p2pool.observer/payouts/$address"  | grep -Po '(?<=<p><strong>Estimated total:</strong>).*?(?<=XMR</p>)' | awk '{print $1}')
+#p2pool=$(curl -sS "https://mini.p2pool.observer/payouts/$address" | grep -Po '(?<=<p><strong>Estimated total:</strong>).*?(?<=XMR</p>)' | awk '{print $1}')
 
 # Fetch xmrvsbeast raffle bonus balance
-xmrvsbeast=$(curl -sS "https://p2pool.observer/payouts/$wallet_id" \
+xmrvsbeast=$(curl -sS "https://p2pool.observer/payouts/$address" \
     | grep -Po '(?<=<p><strong>Estimated total:</strong>).*?(?<=XMR</p>)' | awk '{print $1}')
 
 # P2pool total balance
@@ -44,7 +39,13 @@ total=$(awk "BEGIN{print($main + $p2p_total)}")
 lm_url="https://localmonero.co/web/ticker?currencyCode=$currency"
 
 # Fetch p2pool total number of payouts
-p2p_pn=$(curl -sS "https://mini.p2pool.observer/api/payouts/$miner_id?search_limit=0" | jq -c '.[]' | wc -l)
+mpn=$(curl -sS "https://mini.p2pool.observer/api/payouts/$address?search_limit=0" | jq -c '.[]' | wc -l)
+pn=$(curl -sS "https://p2pool.observer/api/payouts/$address?search_limit=0" | jq -c '.[]' | wc -l)
+if [[ "$mpn" == "1" ]]; then
+p2p_pn="$pn"
+else
+p2p_pn=$(awk "BEGIN{print($mpn + $pn)}")
+fi
 
 # Fetch localmonero info and format output to the desired display pattern
 lm=$(curl -sS "$lm_url" | jq -M '. [] | .avg_6h, .avg_12h, .avg_24h' \
