@@ -13,7 +13,8 @@ It also can get your [xmrvsbeast](https://xmrvsbeast.com/p2pool/) stats.
 - [Rates](https://github.com/lunush/rates), to convert to your favourite fiat currency
 - [Waybar](https://github.com/Alexays/Waybar) (haven't tested with others like polybar, but it should be easy enough to modify it for it)
 
-The rest is done using [P2pool's observer](https://p2pool.observer/api) API and some minimal, direct scraping of the website; and [Localmonero's](https://localmonero.co/web/ticker?currencyCode=USD) API (can be USD, GBP, EUR or HKD).
+The rest is done using [P2pool's observer](https://p2pool.observer/api) API and some minimal, direct scraping of the website;  
+and [Localmonero's](https://localmonero.co/web/ticker?currencyCode=USD) API (can be USD, GBP, EUR or HKD).
 <br clear="right"/>
 
 ## Installation
@@ -95,14 +96,14 @@ symbol=""
     "tooltip":true
     },
 ```
-5. Download/clone needed fonts, my fonts of choice are [wp-cryptofonts](https://github.com/evgrezanov/wp-cryptofonts/raw/main/asset/fonts/cryptofont.ttf). In my system, I have them in `~/.local/share/fonts`
+5. Download/clone needed fonts, my font of choice is [cryptocoins](https://github.com/AllienWorks/cryptocoins/blob/master/webfont/cryptocoins.ttf). In my system, I have it in `~/.local/share/fonts`
 ```
 # Download the fonts
-curl -LJO 'https://github.com/evgrezanov/wp-cryptofonts/raw/main/asset/fonts/cryptofont.ttf'
+curl -LJO 'https://github.com/AllienWorks/cryptocoins/blob/master/webfont/cryptocoins.ttf?raw=true'
 # Copy them to your fonts folder
 cp cryptofont.ttf ~/.local/share/fonts
 # Reload font cache
-sudo fc-cache -f -v
+fc-cache -f -v
 ```
 6. Reload your waybar config
 
