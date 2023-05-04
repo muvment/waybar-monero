@@ -19,6 +19,13 @@ currency=""
 # Currency symbol to use in display ($, £, €, etc...)
 symbol=""
 
+# Crypto symbols
+## Monero
+m=""
+## Other cryptos to show (choose the ones you want)
+s1=""
+s2=""
+
 # Fetch p2pool balance, unquote the correct one (first is main, second is mini)
 #p2pool=$(curl -sS "https://p2pool.observer/payouts/$miner_id"  | grep -Po '(?<=<p><strong>Estimated total:</strong>).*?(?<=XMR</p>)' | awk '{print $1}')
 #p2pool=$(curl -sS "https://mini.p2pool.observer/payouts/$miner_id" | grep -Po '(?<=<p><strong>Estimated total:</strong>).*?(?<=XMR</p>)' | awk '{print $1}')
@@ -57,12 +64,12 @@ BTC=$(rates -s 1 BTC $currency)
 case $1 in
     w)
     # Format of the tooltip display
-    tooltip="Main:\n $MAIN$symbol\nP2pool:\n $P2POOL$symbol\nTotal:\n $TOTAL$symbol\nP2pool payouts:\n$p2p_pn\nLocalmonero:\n$LM1\n$LM2\n$LM3\nRates:\n $XMR$symbol\n $LTC$symbol\n $BTC$symbol\n"
+    tooltip="Main:\n${m} ${MAIN}${symbol}\nP2pool:\n${m} ${P2POOL}${symbol}\nTotal:\n${m} ${TOTAL}${symbol}\nP2pool payouts:\n${p2p_pn}\nLocalmonero:\n${LM1}\n${LM2}\n${LM3}\nRates:\n${m} ${XMR}${symbol}\n${s1} ${LTC}${symbol}\n${s2} ${BTC}${symbol}\n"
 
     # Info to be sent to waybar
-    echo "{\"text\": \" $TOTAL\", \"tooltip\": \"<tt>$tooltip</tt>\", \"class\": \"crypto\"}"
+    echo "{\"text\": \"${m} ${TOTAL}\", \"tooltip\": \"<tt>${tooltip}</tt>\", \"class\": \"crypto\"}"
     ;;
     t)
     # Display in terminal
-    echo -e "Main:\n $MAIN$symbol\nP2pool:\n $P2POOL$symbol\nTotal:\n $TOTAL$symbol\nP2pool payouts:\n$p2p_pn\nLocalmonero:\n$LM1\n$LM2\n$LM3\nRates:\n $XMR$symbol\n $LTC$symbol\n $BTC$symbol\n"
+    echo -e "Main:\n${m} ${MAIN}${symbol}\nP2pool:\n${m} ${P2POOL}${symbol}\nTotal:\n${m} ${TOTAL}${symbol}\nP2pool payouts:\n${p2p_pn}\nLocalmonero:\n${LM1}\n${LM2}\n${LM3}\nRates:\n${m} ${XMR}${symbol}\n${s1} ${LTC}${symbol}\n${s2} ${BTC}${symbol}\n"
 esac
