@@ -139,7 +139,7 @@ fc-cache -f -v
 ![](example/example.gif)
 </details>
 
-## I don' drink coffee.  
+## Donate
 BTC: bc1q0nlxwagsx8w2ctmlqngmq4t24pfntjynafl5sx  
 LTC: ltc1q54lh7pchefwsetmcd3xs3w9tnad35z5m5j0hsm  
 XMR: 83DP8YWimcZBsGkgdegsvRdARa94LoYXeeBjFbbdrQNzMcBw9N7kpyZbydL9iGA9Sc8G1dx42A1bHPvQsmTo5UVj7buwVEm
